@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Blog{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5rem; margin-bottom: 5px; }
+        .header p { opacity: 0.9; }
+        
+        .nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav a:hover { background: #34495e; }
+        .nav .user-info {
+            color: #4CAF50;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .nav .logout { color: #ff6b6b; }
+        
+        .flash-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s ease-out;
+            border-left: 4px solid;
+        }
+        .flash-success { background: #d4edda; color: #155724; border-color: #28a745; }
+        .flash-error { background: #f8d7da; color: #721c24; border-color: #dc3545; }
+        .flash-warning { background: #fff3cd; color: #856404; border-color: #ffc107; }
+        .flash-info { background: #cce5ff; color: #004085; border-color: #007bff; }
+        .flash-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.5;
+            margin-left: auto;
+        }
+        .flash-close:hover { opacity: 1; }
+        
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            width: 100%;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        .btn:hover { opacity: 0.8; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-info { background: #17a2b8; color: white; }
+        
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea { min-height: 150px; resize: vertical; }
+        
+        .post-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .post-card:hover { transform: translateY(-2px); }
+        .post-title { color: #2c3e50; text-decoration: none; font-size: 1.5rem; }
+        .post-title:hover { color: #667eea; }
+        .post-meta { color: #7f8c8d; font-size: 0.9rem; margin: 10px 0; }
+        .post-content { color: #555; line-height: 1.6; }
+        .post-actions { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        .comment {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment-author { font-weight: bold; color: #2c3e50; }
+        .comment-meta { color: #7f8c8d; font-size: 0.8rem; }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .nav { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📝 My Blog</h1>
+        <p>Share your thoughts with the world</p>
+    </div>
+    
+    <div class="nav">
+        <a href="/">🏠 Home</a>
+        <a href="/search">🔍 Search</a>
+        {% if session.logged_in %}
+            <a href="/create_post">✏️ New Post</a>
+            <a href="/my_posts">📄 My Posts</a>
+            <span class="user-info">👤 {{ session.username }}</span>
+            <a href="/profile">Profile</a>
+            <a href="/logout" class="logout">🚪 Logout</a>
+        {% else %}
+            <a href="/register">📝 Register</a>
+            <a href="/login">🔑 Login</a>
+        {% endif %}
+    </div>
+    
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        <span>{{ message }}</span>
+                        <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <div class="footer">
+        &copy; 2026 My Blog App | Built with Flask ❤️
+    </div>
+    
+    <script>
+        // Auto-remove flash messages after 5 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.flash-message').forEach(function(el) {
+                el.style.transition = 'opacity 0.5s';
+                el.style.opacity = '0';
+                setTimeout(function() { el.remove(); }, 500);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

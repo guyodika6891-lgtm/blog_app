@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+    <h2>👤 My Profile</h2>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Member Since:</strong> {{ user.created_at.strftime('%B %d, %Y') }}</p>
+        <p><strong>Total Posts:</strong> {{ user.posts|length }}</p>
+        <p><strong>Total Comments:</strong> {{ user.comments|length }}</p>
+    </div>
+    
+    <div style="background: #2c3e50; color: #4CAF50; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px; word-break: break-all;">
+        🔐 Password Hash: {{ user.password_hash }}
+    </div>
+    
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <a href="{{ url_for('index') }}" class="btn btn-primary">🏠 Home</a>
+        <a href="{{ url_for('create_post') }}" class="btn btn-success">✏️ New Post</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">🚪 Logout</a>
+    </div>
+{% endblock %}

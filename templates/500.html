@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+    <div class="empty-state" style="padding: 60px 20px;">
+        <h1 style="font-size: 4rem; color: #dc3545; margin-bottom: 10px;">500</h1>
+        <h2 style="color: #2c3e50; margin-bottom: 10px;">Something Went Wrong</h2>
+        <p style="margin-bottom: 20px;">Our server had a problem. Please try again later.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">🏠 Go Home</a>
+    </div>
+{% endblock %}
